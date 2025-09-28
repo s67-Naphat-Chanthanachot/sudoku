@@ -1,18 +1,18 @@
-int[][] board = {
-{5,3,0, 0,7,0, 0,0,0},
-{6,0,0, 1,9,5, 0,0,0},
-{2,1,0, 6,2,7, 1,5,2},
-{7,0,2, 1,5,2, 5,0,2},
-{8,2,6, 0,2,1, 7,2,6},
-{5,1,0, 5,0,1, 5,2,3},
-{9,0,4, 0,7,3, 0,0,6},
-{8,2,6, 6,1,8, 0,0,0},
-{6,2,7, 9,1,6, 8,0,0}
-}; 
-int sizeCell =67;
+int[][] board = new int[9][9]; 
+boolean[][] fixed = new boolean[9][9]; 
+int sizeCell = 60;
+int r = -1, c = -1;           
+
 void setup() {
-  size(600,600);
+  size(500, 500);
+  loadGame("sudoku.txt"); 
 }
+
+void draw() {
+  background(255);
+  drawGrid();
+}
+
 void drawGrid() {
   int i = 0;
   while (i <= 9) {
@@ -23,24 +23,22 @@ void drawGrid() {
   }
 }
 
-void drawNumbers() {
-  textAlign(CENTER, CENTER);
-  textSize(24);
+void loadGame(String fileName) {
+  String[] lines = loadStrings(fileName);
   int i = 0;
-  while (i < 9) {
-    int j = 0;
-    while (j < 9) {
-      if (board[i][j] != 0) {
-        fill(0);
-        text(board[i][j], j*sizeCell + sizeCell/2, i*sizeCell + sizeCell/2);
+  int row = 0;
+  while (i < lines.length && row < 9) {
+    String line = trim(lines[i]);
+    if (line.length() > 0) {
+      String[] nums = splitTokens(line, " \t");
+      int j = 0;
+      while (j < 9 && j < nums.length) {
+        board[row][j] = int(nums[j]);
+        fixed[row][j] = (board[row][j] != 0);
+        j++;
       }
-      j++;
+      row++;
     }
     i++;
   }
-}
-void draw() {
-  background(255);
-  drawNumbers();
-  drawGrid();
 }
