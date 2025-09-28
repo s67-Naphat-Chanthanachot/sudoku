@@ -62,6 +62,28 @@ void highlightSelected() {
   }
 }
 
+boolean checkValid(int row, int col, int val) {
+  int i = 0;
+  while (i < 9) {
+    if (board[row][i] == val) return false; 
+    if (board[i][col] == val) return false; 
+    i++;
+  }
+
+  int startR = (row / 3) * 3;
+  int startC = (col / 3) * 3;
+  i = 0;
+  while (i < 3) {
+    int j = 0;
+    while (j < 3) {
+      if (board[startR + i][startC + j] == val) return false; 
+      j++;
+    }
+    i++;
+  }
+  return true;
+}
+
 void loadGame(String fileName) {
   String[] lines = loadStrings(fileName);
   int i = 0;
@@ -71,4 +93,13 @@ void loadGame(String fileName) {
     if (line.length() > 0) {
       String[] nums = splitTokens(line, " \t");
       int j = 0;
-      while (j < 9 && j < nums.leng
+      while (j < 9 && j < nums.length) {
+        board[row][j] = int(nums[j]);
+        fixed[row][j] = (board[row][j] != 0);
+        j++;
+      }
+      row++;
+    }
+    i++;
+  }
+}
